@@ -3,8 +3,8 @@
 * Services - SystemD
 * Protocol - Tcp
 * Protocol - Udp
-* Fail Login Users
-* Last in login users
+* Login Attempt
+* Who is logged in
 
 
 ## How to
@@ -14,5 +14,5 @@
 3) Restart daemon or process zabbix agent;
 
 
-Help
+##Help
 tleite@bsd.com.br
