@@ -7,7 +7,7 @@
 * Last in login users
 
 
-## How to !
+## How to
 
 1) Import template <Template_Discovery_TUProcSystemD.xml>;
 2) Import file <discovery_TUProcSystemD.conf> on the directory "/etc/zabbix/zabbix_agentd.d"
