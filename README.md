@@ -13,6 +13,11 @@
 2) Import file <discovery_TUProcSystemD.conf> on the directory "/etc/zabbix/zabbix_agentd.d"
 3) Restart daemon or process zabbix agent;
 
+```
+Option - Macro Zabbix User
+{$UPDATE.DISCOVERY}
+{$UPDATE.ITEM}
+```
 
 ### Help
 tleite@bsd.com.br
