@@ -1,2 +1,18 @@
-# Zabbix_SystemD_Tcp_Udp_
-Monitoring SystemD services, protocol TCP and UDP - LLD Zabbix5
+# Monitoring with Zabbix
+
+* Services - SystemD
+* Protocol - Tcp
+* Protocol - Udp
+* Fail Login Users
+* Last in login users
+
+
+## How to !
+
+1) Import template <Template_Discovery_TUProcSystemD.xml>;
+2) Import file <discovery_TUProcSystemD.conf> on the directory "/etc/zabbix/zabbix_agentd.d"
+3) Restart daemon or process zabbix agent;
+
+
+Help
+tleite@bsd.com.br
