@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2021-02-02T12:40:51Z</date>
+    <groups>
+        <group>
+            <name>Templates/Linux</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Template Discovery  TUProcSystemD</template>
+            <name>Template Discovery  TUProcSystemD</name>
+            <description>By tleite@bsd.com.br</description>
+            <groups>
+                <group>
+                    <name>Templates/Linux</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>Security</name>
+                </application>
+                <application>
+                    <name>Status Services</name>
+                </application>
+                <application>
+                    <name>TCP</name>
+                </application>
+                <application>
+                    <name>UDP</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>Who is logged in</name>
+                    <key>discovery.conn</key>
+                    <delay>{$UPDATE.ITEM}</delay>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                    <applications>
+                        <application>
+                            <name>Security</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Login Attempt</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>log[/var/log/secure,&quot;(Accepted|Failed) password&quot;,,,skip,]</key>
+                    <history>30d</history>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                    <applications>
+                        <application>
+                            <name>Security</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{str(Accepted)}=1 and &#13;
+{nodata(60)}=0 and&#13;
+({time(0)}&lt;080000 or &#13;
+{time(0)}&gt;200000)</expression>
+                            <name>Login attempt has accepted</name>
+                            <priority>AVERAGE</priority>
+                            <description>&quot;Se houver um login de usuário entre 20h e 8h, os dados de retorno do item conterão &quot;Aceito&quot;, o acionador será acionado e, se não houver novos dados em 60 segundos, o acionador será restaurado.&quot;&#13;
+&#13;
+lógica:  A &amp; B &amp; (C | D)</description>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                        <trigger>
+                            <expression>{str(Failed)}=1&#13;
+and&#13;
+{nodata(60)}=0</expression>
+                            <name>Login attempt has failed</name>
+                            <priority>AVERAGE</priority>
+                            <description>&quot;Se o usuário não conseguir fazer login, os dados de retorno do item conterão &quot;Falha&quot;, o gatilho será disparado e, se não houver novos dados em 60 segundos, o gatilho será restaurado.&#13;
+Isso garante que o gatilho nem sempre estará no estado de gatilho.&quot;&#13;
+&#13;
+lógica:  A e B</description>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>Discovery Services SystemD</name>
+                    <key>discovery.services</key>
+                    <delay>{$UPDATE.DISCOVERY}</delay>
+                    <lifetime>1h</lifetime>
+                    <description>Update by tleite@bsd.com.br</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Status of &quot;$1&quot;</name>
+                            <key>systemctl.status[{#SERVICE}]</key>
+                            <delay>{$UPDATE.ITEM}</delay>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Status Services</name>
+                                </application>
+                            </applications>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{str(running)}&lt;&gt;1</expression>
+                                    <name>Service &quot;{#SERVICE}&quot;  not running on host &quot;{HOST.NAME}&quot; and IP &quot;{HOST.IP}&quot;</name>
+                                    <priority>AVERAGE</priority>
+                                    <manual_close>YES</manual_close>
+                                    <tags>
+                                        <tag>
+                                            <tag>CRITICO</tag>
+                                            <value>TESTE</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>Discovery Listen Ports TCP</name>
+                    <key>ports.tcp</key>
+                    <delay>{$UPDATE.DISCOVERY}</delay>
+                    <lifetime>24h</lifetime>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Port &quot;$1/tcp&quot;</name>
+                            <key>net.tcp.listen[{#T_PORT}]</key>
+                            <delay>{$UPDATE.ITEM}</delay>
+                            <history>7d</history>
+                            <trends>90d</trends>
+                            <applications>
+                                <application>
+                                    <name>TCP</name>
+                                </application>
+                            </applications>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}=0</expression>
+                                    <name>Not Listen port {#T_PORT} on {HOST.NAME} and IP {HOST.IP}</name>
+                                    <priority>AVERAGE</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>Discovery Listen Ports UDP</name>
+                    <key>ports.udp</key>
+                    <delay>{$UPDATE.DISCOVERY}</delay>
+                    <filter>
+                        <conditions>
+                            <condition>
+                                <macro>{#U_PORT}</macro>
+                                <value>(68|323)</value>
+                                <formulaid>A</formulaid>
+                            </condition>
+                        </conditions>
+                    </filter>
+                    <lifetime>24h</lifetime>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Port &quot;$1/udp&quot;</name>
+                            <key>net.udp.listen[{#U_PORT}]</key>
+                            <delay>{$UPDATE.ITEM}</delay>
+                            <history>7d</history>
+                            <trends>90d</trends>
+                            <applications>
+                                <application>
+                                    <name>UDP</name>
+                                </application>
+                            </applications>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}=0</expression>
+                                    <name>Not Listen port {#U_PORT} on {HOST.NAME} and IP {HOST.IP}</name>
+                                    <priority>AVERAGE</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <macros>
+                <macro>
+                    <macro>{$UPDATE.DISCOVERY}</macro>
+                    <value>6h</value>
+                </macro>
+                <macro>
+                    <macro>{$UPDATE.ITEM}</macro>
+                    <value>2m</value>
+                </macro>
+            </macros>
+        </template>
+    </templates>
+</zabbix_export>
