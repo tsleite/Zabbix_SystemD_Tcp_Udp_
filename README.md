@@ -21,13 +21,13 @@ Option - Alter Macro Zabbix User
 
 ### Images
 
-1) Discovery
+1) Template
 ![discovery_template](https://github.com/tsleite/Zabbix_SystemD_Tcp_Udp_/blob/main/Discovery_template.png?raw=true)
 
-2)
+2) Test Problem - Login Attempt
 ![problem_login_attempt](https://github.com/tsleite/Zabbix_SystemD_Tcp_Udp_/blob/main/problem01_login_attempt.png?raw=true)
 
-3)
+3) Test Problem - Service ( systemD )
 ![problem_systemd_services](https://github.com/tsleite/Zabbix_SystemD_Tcp_Udp_/blob/main/problem02_service_systemd_elasticsearch.png?raw=true)
 
 
