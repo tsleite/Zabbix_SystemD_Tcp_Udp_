@@ -14,9 +14,9 @@
 3) Restart daemon or process zabbix agent;
 
 ```
-Option - Macro Zabbix User
-{$UPDATE.DISCOVERY}
-{$UPDATE.ITEM}
+Option - Alter Macro Zabbix User
+{$UPDATE.DISCOVERY} - 6h
+{$UPDATE.ITEM} - 2m
 ```
 
 ### Help
