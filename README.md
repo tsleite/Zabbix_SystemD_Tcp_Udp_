@@ -19,5 +19,17 @@ Option - Alter Macro Zabbix User
 {$UPDATE.ITEM} - 2m
 ```
 
-### Help
+### Images
+
+1) Discovery
+![discovery_template](https://github.com/tsleite/Zabbix_SystemD_Tcp_Udp_/blob/main/Discovery_template.png?raw=true)
+
+2)
+![problem_login_attempt](https://github.com/tsleite/Zabbix_SystemD_Tcp_Udp_/blob/main/problem01_login_attempt.png?raw=true)
+
+3)
+![problem_systemd_services](https://github.com/tsleite/Zabbix_SystemD_Tcp_Udp_/blob/main/problem02_service_systemd_elasticsearch.png?raw=true)
+
+
+#### Help
 tleite@bsd.com.br
